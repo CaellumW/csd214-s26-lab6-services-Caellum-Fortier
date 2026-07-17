@@ -72,6 +72,7 @@ public class App {
             System.out.println("6. Add Battery");
             System.out.println("7. Add Gel Polish");
             System.out.println("8. Add Nail Accessory");
+            System.out.println("9. Add Nail Kit");
             System.out.println("99. Exit");
 
             try {
@@ -94,6 +95,7 @@ public class App {
                 case 6: item = new Battery(); break;
                 case 7: item = new GelPolish(); break;
                 case 8: item = new NailAccessory(); break;
+                case 9: item = new NailKit(); break;
                 default: System.out.println("Invalid selection."); continue;
             }
 
@@ -120,6 +122,8 @@ public class App {
             entity = ((GelPolish) item).toEntity();
         } else if (item instanceof NailAccessory) {
             entity = ((NailAccessory) item).toEntity();
+        } else if (item instanceof NailKit) {
+            entity = ((NailKit) item).toEntity();
         }
 
         if (entity != null) {
@@ -147,6 +151,7 @@ public class App {
             System.out.println("7. Batteries Only");
             System.out.println("8. Gel Polish Only");
             System.out.println("9. Nail Accessories Only");
+            System.out.println("10. Nail Kits Only");
             System.out.println("99. Exit");
 
             try {
@@ -170,6 +175,7 @@ public class App {
                 case 7: filterClass = BatteryEntity.class; break;
                 case 8: filterClass = GelPolishEntity.class; break;
                 case 9: filterClass = NailAccessoryEntity.class; break;
+                case 10: filterClass = NailKitEntity.class; break;
                 default: System.out.println("Invalid selection."); continue;
             }
 
@@ -204,6 +210,8 @@ public class App {
             System.out.println(GelPolish.fromEntity((GelPolishEntity) entity));
         } else if (entity instanceof NailAccessoryEntity) {
             System.out.println(NailAccessory.fromEntity((NailAccessoryEntity) entity));
+        } else if (entity instanceof NailKitEntity) {
+            System.out.println(NailKit.fromEntity((NailKitEntity) entity));
         }
     }
 
@@ -256,6 +264,10 @@ public class App {
                     updatedEntity = dto.toEntity();
                 } else if (entity instanceof NailAccessoryEntity) {
                     NailAccessory dto = NailAccessory.fromEntity((NailAccessoryEntity) entity);
+                    dto.edit(this.input);
+                    updatedEntity = dto.toEntity();
+                } else if (entity instanceof NailKitEntity) {
+                    NailKit dto = NailKit.fromEntity((NailKitEntity) entity);
                     dto.edit(this.input);
                     updatedEntity = dto.toEntity();
                 }
@@ -344,6 +356,12 @@ public class App {
                     updatedEntity = dto.toEntity();
                 } else if (entity instanceof NailAccessoryEntity) {
                     NailAccessory dto = NailAccessory.fromEntity((NailAccessoryEntity) entity);
+                    cashTill.sellItem(dto);
+                    updatedEntity = dto.toEntity();
+                } else if (entity instanceof NailKitEntity) {
+                    NailKit dto = NailKit.fromEntity((NailKitEntity) entity);
+                    cashTill.sellItem(dto);
+                    updatedEntity = dto.toEntity();
                 }
 
                 if (updatedEntity != null) {
@@ -423,6 +441,12 @@ public class App {
                         faker.medical().medicineName()
                 );
                 repository.save(accessory);
+
+                NailKitEntity kit = new NailKitEntity(
+                        faker.color().name(),
+                        faker.leagueOfLegends().rank()
+                );
+                repository.save(kit);
             }
             System.out.println("Seeding complete. All products persisted directly to database via Repository.");
         } catch (Exception e) {
@@ -457,6 +481,8 @@ public class App {
                     return GelPolish.fromEntity((GelPolishEntity) entity);
                 } else if (entity instanceof NailAccessoryEntity) {
                     return NailAccessory.fromEntity((NailAccessoryEntity) entity);
+                } else if (entity instanceof NailKitEntity) {
+                    return NailKit.fromEntity((NailKitEntity) entity);
                 }
             }
         }
@@ -484,6 +510,8 @@ public class App {
                 pojo = GelPolish.fromEntity((GelPolishEntity) entity);
             } else if (entity instanceof NailAccessoryEntity) {
                 pojo = NailAccessory.fromEntity((NailAccessoryEntity) entity);
+            } else if (entity instanceof NailKitEntity) {
+                pojo = NailKit.fromEntity((NailKitEntity) entity);
             }
 
             if (pojo != null && pojo.equals(item)) {

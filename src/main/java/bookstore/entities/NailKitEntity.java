@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class NailKitEntity extends NailProductEntity {
@@ -32,12 +33,12 @@ public class NailKitEntity extends NailProductEntity {
     }
 
     @Column(name = "items")
-    private ArrayList<NailProduct> items;
+    private ArrayList<NailProductEntity> items;
 
-    public ArrayList<NailProduct> getItems() {
+    public ArrayList<NailProductEntity> getItems() {
         return items;
     }
-    public void setItems(ArrayList<NailProduct>) {
+    public void setItems(ArrayList<NailProductEntity> items) {
         this.items = items;
     }
 
@@ -57,17 +58,46 @@ public class NailKitEntity extends NailProductEntity {
     }
 
     //    param constructor
-    public NailKitEntity(String kitType, String kitLevel, ArrayList<NailProduct> items) {
+    public NailKitEntity(String kitType, String kitLevel, ArrayList<NailProductEntity> items) {
         this.kitType = kitType;
         this.kitLevel = kitLevel;
         this.items = items;
     }
 
+//    constructor just for ease of testing tbh
+public NailKitEntity(String kitType, String kitLevel) {
+    this.kitType = kitType;
+    this.kitLevel = kitLevel;
+}
+
     //    super constructor
-    public NailKitEntity(String id, String brand, int stock, double price, String kitType, String kitLevel, ArrayList<NailProduct> items) {
+    public NailKitEntity(String id, String brand, int stock, double price, String kitType, String kitLevel, ArrayList<NailProductEntity> items) {
         super(id, brand, stock, price);
         this.kitType = kitType;
         this.kitLevel = kitLevel;
         this.items = items;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        NailKitEntity that = (NailKitEntity) o;
+        return Objects.equals(kitType, that.kitType) && Objects.equals(kitLevel, that.kitLevel) && Objects.equals(items, that.items) && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(kitType, kitLevel, items, id);
+    }
+
+    @Override
+    public String toString() {
+        return "NailKitEntity{" +
+                "kitType='" + kitType + '\'' +
+                ", kitLevel='" + kitLevel + '\'' +
+                ", items=" + items +
+                ", id=" + id +
+                "} " + super.toString();
     }
 }
