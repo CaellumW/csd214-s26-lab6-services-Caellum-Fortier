@@ -70,6 +70,8 @@ public class App {
             System.out.println("4. Add Ticket");
             System.out.println("5. Add Tire");
             System.out.println("6. Add Battery");
+            System.out.println("7. Add Gel Polish");
+            System.out.println("8. Add Nail Accessory");
             System.out.println("99. Exit");
 
             try {
@@ -90,6 +92,8 @@ public class App {
                 case 4: item = new Ticket(); break;
                 case 5: item = new Tire(); break;
                 case 6: item = new Battery(); break;
+                case 7: item = new GelPolish(); break;
+                case 8: item = new NailAccessory(); break;
                 default: System.out.println("Invalid selection."); continue;
             }
 
@@ -112,6 +116,10 @@ public class App {
             entity = ((Battery) item).toEntity();
         } else if (item instanceof Tire) {
             entity = ((Tire) item).toEntity();
+        } else if (item instanceof GelPolish) {
+            entity = ((GelPolish) item).toEntity();
+        } else if (item instanceof NailAccessory) {
+            entity = ((NailAccessory) item).toEntity();
         }
 
         if (entity != null) {
@@ -137,6 +145,8 @@ public class App {
             System.out.println("5. Tickets Only");
             System.out.println("6. Tires Only");
             System.out.println("7. Batteries Only");
+            System.out.println("8. Gel Polish Only");
+            System.out.println("9. Nail Accessories Only");
             System.out.println("99. Exit");
 
             try {
@@ -158,6 +168,8 @@ public class App {
                 case 5: filterClass = TicketEntity.class; break;
                 case 6: filterClass = TireEntity.class; break;
                 case 7: filterClass = BatteryEntity.class; break;
+                case 8: filterClass = GelPolishEntity.class; break;
+                case 9: filterClass = NailAccessoryEntity.class; break;
                 default: System.out.println("Invalid selection."); continue;
             }
 
@@ -188,6 +200,10 @@ public class App {
             System.out.println(Battery.fromEntity((BatteryEntity) entity));
         } else if (entity instanceof TireEntity) {
             System.out.println(Tire.fromEntity((TireEntity) entity));
+        } else if (entity instanceof GelPolishEntity) {
+            System.out.println(GelPolish.fromEntity((GelPolishEntity) entity));
+        } else if (entity instanceof NailAccessoryEntity) {
+            System.out.println(NailAccessory.fromEntity((NailAccessoryEntity) entity));
         }
     }
 
@@ -232,6 +248,14 @@ public class App {
                     updatedEntity = dto.toEntity();
                 } else if (entity instanceof TireEntity) {
                     Tire dto = Tire.fromEntity((TireEntity) entity);
+                    dto.edit(this.input);
+                    updatedEntity = dto.toEntity();
+                } else if (entity instanceof GelPolishEntity) {
+                    GelPolish dto = GelPolish.fromEntity((GelPolishEntity) entity);
+                    dto.edit(this.input);
+                    updatedEntity = dto.toEntity();
+                } else if (entity instanceof NailAccessoryEntity) {
+                    NailAccessory dto = NailAccessory.fromEntity((NailAccessoryEntity) entity);
                     dto.edit(this.input);
                     updatedEntity = dto.toEntity();
                 }
@@ -314,6 +338,12 @@ public class App {
                     Tire dto = Tire.fromEntity((TireEntity) entity);
                     cashTill.sellItem(dto);
                     updatedEntity = dto.toEntity();
+                } else if (entity instanceof GelPolishEntity) {
+                    GelPolish dto = GelPolish.fromEntity((GelPolishEntity) entity);
+                    cashTill.sellItem(dto);
+                    updatedEntity = dto.toEntity();
+                } else if (entity instanceof NailAccessoryEntity) {
+                    NailAccessory dto = NailAccessory.fromEntity((NailAccessoryEntity) entity);
                 }
 
                 if (updatedEntity != null) {
@@ -383,6 +413,16 @@ public class App {
                         faker.number().numberBetween(500, 950)
                 );
                 repository.save(battery);
+
+                GelPolishEntity polish = new GelPolishEntity(
+                        faker.color().name()
+                );
+                repository.save(polish);
+
+                NailAccessoryEntity accessory = new NailAccessoryEntity(
+                        faker.medical().medicineName()
+                );
+                repository.save(accessory);
             }
             System.out.println("Seeding complete. All products persisted directly to database via Repository.");
         } catch (Exception e) {
@@ -413,6 +453,10 @@ public class App {
                     return Battery.fromEntity((BatteryEntity) entity);
                 } else if (entity instanceof TireEntity) {
                     return Tire.fromEntity((TireEntity) entity);
+                } else if (entity instanceof GelPolishEntity) {
+                    return GelPolish.fromEntity((GelPolishEntity) entity);
+                } else if (entity instanceof NailAccessoryEntity) {
+                    return NailAccessory.fromEntity((NailAccessoryEntity) entity);
                 }
             }
         }
@@ -436,6 +480,10 @@ public class App {
                 pojo = Battery.fromEntity((BatteryEntity) entity);
             } else if (entity instanceof TireEntity) {
                 pojo = Tire.fromEntity((TireEntity) entity);
+            } else if (entity instanceof GelPolishEntity) {
+                pojo = GelPolish.fromEntity((GelPolishEntity) entity);
+            } else if (entity instanceof NailAccessoryEntity) {
+                pojo = NailAccessory.fromEntity((NailAccessoryEntity) entity);
             }
 
             if (pojo != null && pojo.equals(item)) {
